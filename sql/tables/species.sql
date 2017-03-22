@@ -1,4 +1,4 @@
-CREATE TABLE api.species (
+CREATE TABLE species (
   id serial PRIMARY KEY,
   common_name text NOT NULL,
   species_code text,
