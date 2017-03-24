@@ -1,4 +1,0 @@
-UPDATE elements
-SET species_id = species.id
-FROM species
-WHERE ndow_species_code = species.ndow_id;
