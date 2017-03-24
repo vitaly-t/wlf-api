@@ -3,3 +3,4 @@ data
 sql/seeds/data/
 
 .DS_Store
+node_modules
