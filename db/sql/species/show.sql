@@ -1,3 +1,3 @@
 SELECT *
 FROM species
-WHERE id = ${id}
+WHERE id = ${speciesId}
