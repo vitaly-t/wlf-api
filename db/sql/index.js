@@ -19,5 +19,9 @@ module.exports = {
   species: {
     all: sql('species/all.sql'),
     show: sql('species/show.sql')
+  },
+  projects: {
+    all: sql('projects/all.sql'),
+    show: sql('projects/show.sql')
   }
 }

@@ -13,6 +13,7 @@ app.use(expressValidator())
 const routes = require('./routes')
 
 app.use('/species', routes.species)
+app.use('/projects', routes.projects)
 
 app.listen(port, () => {
   console.log('API listening on port ' + port)

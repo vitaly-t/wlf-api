@@ -4,7 +4,8 @@ const env = process.env.ENV
 const config = require('../config/database.json')[env]
 
 const repos = {
-  species: require('./repos/species')
+  species: require('./repos/species'),
+  projects: require('./repos/projects')
 }
 
 // set pg-promise options

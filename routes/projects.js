@@ -3,22 +3,21 @@ const router = Express.Router()
 const db = require('../db')
 
 router.get('/', (req, res) => {
-  // TODO: qs.s = search full text scientific name and common name
-  db.species.all()
+  db.projects.all()
   .then(data => res.status(200).json({ success: true, data: data }))
   .catch(err => res.status(400).json({ success: false, error: err }))
 })
 
-router.get('/:speciesId', (req, res) => {
+router.get('/:projectId', (req, res) => {
   // run param validation
-  req.checkParams('speciesId', 'Invalid speciesId').notEmpty().isInt()
+  req.checkParams('projectId', 'Invalid projectId').notEmpty().isInt()
 
   // get the results of the validation
   req.getValidationResult()
   .then(result => {
     if (result.isEmpty()) {
       // if no validation errors, send params to db
-      return db.species.show(req.params)
+      return db.projects.show(req.params)
     } else {
       // else return expressValidator error object (this triggers .catch)
       return result.throw()
