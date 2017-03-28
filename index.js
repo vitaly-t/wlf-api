@@ -14,6 +14,7 @@ const routes = require('./routes')
 
 app.use('/species', routes.species)
 app.use('/projects', routes.projects)
+app.use('/elements', routes.elements)
 
 app.listen(port, () => {
   console.log('API listening on port ' + port)
