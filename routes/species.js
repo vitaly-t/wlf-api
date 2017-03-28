@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 
 router.get('/:speciesId', (req, res) => {
   // run param validation
-  req.checkParams('speciesId', 'Invalid speciesId').notEmpty().isInt()
+  req.checkParams('speciesId', 'Invalid speciesId, must be an integer').notEmpty().isInt()
 
   // get the results of the validation
   req.getValidationResult()
