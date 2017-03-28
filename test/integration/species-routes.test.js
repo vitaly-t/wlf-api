@@ -17,17 +17,6 @@ describe('routes : species', () => {
     .catch(err => console.log(err))
   })
 
-  // before(() => {
-  //   db.up()
-  //   .then(() => console.log('data up'))
-  //   .catch(err => console.log(err))
-  // })
-  //
-  // after(() => {
-  //   db.rollback()
-  //   .catch(err => console.log(err))
-  // })
-
   describe('GET /species', function () {
     it('should return all species', (done) => {
       request(app)
