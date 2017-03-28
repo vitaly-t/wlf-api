@@ -1,16 +1,29 @@
+/* eslint-env mocha */
+
 const app = require('../../index')
+const db = require('../../db').mock
 const chai = require('chai')
 const request = require('supertest')
 const expect = chai.expect
 
 describe('routes : species', () => {
+  before(() => {
+    db.up()
+    .catch(err => console.log(err))
+  })
+
+  after(() => {
+    db.rollback()
+    .catch(err => console.log(err))
+  })
 
   describe('GET /species', function () {
     it('should return all species', (done) => {
       request(app)
         .get('/species')
         .end((err, res) => {
-          expect(res.status).to.equal(200)
+          if (err) return done(err)
+          expect(res.statusCode).to.equal(200)
           expect(res.body).to.be.an('object')
           expect(res.body).to.have.property('success', true)
           expect(res.body).to.have.property('data')
@@ -26,6 +39,7 @@ describe('routes : species', () => {
       request(app)
         .get('/species/1')
         .end((err, res) => {
+          if (err) return done(err)
           expect(res.status).to.equal(200)
           expect(res.body).to.be.an('object')
           expect(res.body).to.have.property('success', true)
@@ -35,10 +49,12 @@ describe('routes : species', () => {
         })
     })
 
+    // test validation works
     it('should not pass validation if :speciesId is not an integer', done => {
       request(app)
         .get('/species/abc')
         .end((err, res) => {
+          if (err) return done(err)
           expect(res.status).to.equal(400)
           expect(res.body).to.be.an('object')
           expect(res.body).to.have.property('success', false)
@@ -49,5 +65,3 @@ describe('routes : species', () => {
     })
   })
 })
-
-exports.species_show_should_

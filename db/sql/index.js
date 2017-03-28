@@ -23,5 +23,9 @@ module.exports = {
   projects: {
     all: sql('projects/all.sql'),
     show: sql('projects/show.sql')
+  },
+  mock: {
+    up: sql('mock/up.sql'),
+    rollback: sql('mock/rollback.sql')
   }
 }
