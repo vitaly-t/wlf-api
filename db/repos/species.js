@@ -2,7 +2,7 @@ const sql = require('../sql').species
 
 module.exports = (rep, pgp) => {
   return {
-    all: () => rep.manyOrNone(sql.all),
+    all: where => rep.manyOrNone(sql.all, where),
     show: id => rep.oneOrNone(sql.show, id)
   }
 }
