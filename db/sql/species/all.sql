@@ -1,3 +1,3 @@
 SELECT *
 FROM species
-WHERE ($1^)
+$1^

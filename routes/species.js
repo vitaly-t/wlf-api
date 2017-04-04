@@ -1,10 +1,11 @@
 const Express = require('express')
 const router = Express.Router()
 const db = require('../db')
+const sqlqs = require('../middleware/sqlqs').sqlqs
 
-router.get('/', (req, res) => {
+router.get('/', sqlqs, (req, res) => {
   // TODO: qs.s = search full text scientific name and common name
-  db.species.all()
+  db.species.all(req.where)
   .then(data => res.status(200).json({ success: true, data: data }))
   .catch(err => res.status(400).json({ success: false, error: err }))
 })
