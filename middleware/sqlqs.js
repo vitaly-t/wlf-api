@@ -5,7 +5,9 @@ const operators = {
   lte: '<=',
   lt: '<',
   neq: '!=',
-  in: 'IN'
+  in: 'IN',
+  s: '@@',
+  like: 'ILIKE'
 }
 
 const safeText = text => text.replace(/'/g, '\'\'')
