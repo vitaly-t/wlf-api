@@ -21,7 +21,8 @@ const Event = attributes({
   },
   rel_loc_id: {
     type: Number,
-    integer: true
+    integer: true,
+    empty: true
   },
   status: {
     type: String,
@@ -29,7 +30,8 @@ const Event = attributes({
     equal: ['alive', 'mortality', 'harvest', 'unk']
   },
   age: {
-    type: String
+    type: String,
+    default: null
   },
   event_date: {
     type: Date,
@@ -43,9 +45,13 @@ const Event = attributes({
   },
   enc_reason: {
     type: String,
-    equal: ['disease', 'monitoring', 'translocation']
+    empty: true,
+    equal: ['disease', 'monitoring', 'translocation'],
+    default: null
   }
-})(class Event {})
+})(class Event {
+  keys () { Object.keys(this.attributes) }
+})
 
 router.post('/', (req, res) => {
   const validPromise = (structure) => {
