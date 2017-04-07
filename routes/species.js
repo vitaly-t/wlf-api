@@ -1,7 +1,6 @@
 const Express = require('express')
 const router = Express.Router()
 const db = require('../db')
-const models = require('../models')
 const sqlqs = require('../middleware/sqlqs').sqlqs
 
 router.get('/', sqlqs, (req, res) => {
@@ -26,14 +25,8 @@ router.get('/:speciesId', (req, res) => {
       return result.throw()
     }
   })
-  .then(rtn => res.status(200).json({ success: true, data: rtn }))
+  .then(data => res.status(200).json({ success: true, data: data }))
   .catch(err => res.status(400).json({ success: false, error: err.array() }))
-})
-
-router.post('/', (req, res) => {
-  console.log(models.Species)
-  const species = new models.Species(req.body)
-  res.status(200).json(species)
 })
 
 module.exports = router

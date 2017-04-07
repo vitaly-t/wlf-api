@@ -1,4 +1,6 @@
 const { attributes } = require('structure')
+const db = require('../db')
+const pgp = db.$config.pgp
 
 const Species = attributes({
   id: {
@@ -40,6 +42,11 @@ const Species = attributes({
 })(class Species {
   keys () {
     return Object.keys(this.attributes)
+  }
+
+  findById (id) {
+    const sql = pgp.as.format('SELECT * FROM species WHERE speciesId = $<id>', {id: id})
+    return sql
   }
 })
 
