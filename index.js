@@ -23,6 +23,11 @@ app.use('/events', routes.events)
 
 app.get('/animals', (req, res) => {
   db.many('SELECT * FROM animals')
+  /*
+  animals is a view in the database that serializes in Postgres. An alternative that I may
+  investigate is batch the queries as a transaction (task), then coercing the results to a
+  model of the data? maybe? Either way, filtering will likely be difficult.
+  */
   .then(data => res.status(200).json({ success: true, data: data }))
   .catch(err => res.status(400).json({ success: false, error: err }))
 })
