@@ -1,6 +1,6 @@
 {
   "name": "encounter-api",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "an api to access the encounter database",
   "main": "index.js",
   "scripts": {
