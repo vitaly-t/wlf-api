@@ -1,25 +1,6 @@
 const { attributes } = require('structure')
 
-const Event = attributes({
-  id: {
-    type: Number,
-    integer: true
-  },
-  element_id: {
-    type: Number,
-    integer: true,
-    required: true
-  },
-  // cap_loc_id: {
-  //   type: Number,
-  //   integer: true,
-  //   required: true
-  // },
-  // rel_loc_id: {
-  //   type: Number,
-  //   integer: true,
-  //   empty: true
-  // },
+const Encounter = attributes({
   status: {
     type: String,
     required: true,
@@ -44,9 +25,15 @@ const Event = attributes({
     empty: true,
     equal: ['disease', 'monitoring', 'translocation'],
     default: null
+  },
+  biometrics: {
+    type: Array,
+    itemType: 'Biometrics'
   }
-})(class Event {
-  keys () { Object.keys(this.attributes) }
-})
+}, {
+  dynamics: {
+    Biometrics: () => require('./biometrics')
+  }
+})(class Encounter {})
 
-module.exports = Event
+module.exports = Encounter

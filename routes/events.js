@@ -54,4 +54,11 @@ router.post('/', (req, res) => {
   .catch(err => res.status(400).json({ success: false, error: err }))
 })
 
+router.post('/encounters', (req, res) => {
+  const encounter = new models.Encounter(req.body)
+  validate(encounter)
+  .then(data => res.status(200).json({ success: true, data: data }))
+  .catch(err => res.status(400).json({ success: false, error: err }))
+})
+
 module.exports = router
