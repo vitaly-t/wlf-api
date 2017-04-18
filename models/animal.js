@@ -20,10 +20,14 @@ const Animal = attributes({
   marks: {
     type: Array,
     itemType: 'Marks'
+  },
+  encounters: {
+    type: 'Encounters'
   }
 }, {
   dynamics: {
-    Marks: () => require('./marks')
+    Marks: () => require('./marks'),
+    Encounters: () => require('./encounter')
   }
 })(class Animal {})
 

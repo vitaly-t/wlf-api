@@ -29,10 +29,15 @@ const Encounter = attributes({
   biometrics: {
     type: Array,
     itemType: 'Biometrics'
+  },
+  samples: {
+    type: Array,
+    itemType: 'Samples'
   }
 }, {
   dynamics: {
-    Biometrics: () => require('./biometrics')
+    Biometrics: () => require('./biometric'),
+    Samples: () => require('./sample')
   }
 })(class Encounter {})
 
