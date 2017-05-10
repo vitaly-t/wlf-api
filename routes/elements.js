@@ -9,7 +9,8 @@ const validate = require('../middleware/promise-validate')
 
 // GET ALL ANIMALS/ELEMENTS. THIS IS A SUMMARIZED VIEW SIMILAR TO THE SPECIMEN LOG
 router.get('/', (req, res) => {
-  db.manyOrNone('SELECT * FROM animal_log ORDER BY animal_id, event_date')
+  // db.manyOrNone('SELECT * FROM animal_log ORDER BY animal_id, event_date')
+  db.manyOrNone('SELECT * FROM speclog ORDER BY ndow_id, date')
   .then(data => res.status(200).json({ success: true, data: data }))
   .catch(err => res.status(400).json({ success: false, error: err }))
 })
