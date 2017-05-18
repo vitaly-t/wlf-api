@@ -7,8 +7,8 @@ const Event = attributes({
   },
   element_id: {
     type: Number,
-    integer: true,
-    required: true
+    integer: true
+    // required: true
   },
   // cap_loc_id: {
   //   type: Number,
@@ -44,6 +44,12 @@ const Event = attributes({
     empty: true,
     equal: ['disease', 'monitoring', 'translocation'],
     default: null
+  },
+  x: {
+    type: Number
+  },
+  y: {
+    type: Number
   }
 })(class Event {
   keys () { Object.keys(this.attributes) }

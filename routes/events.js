@@ -62,37 +62,53 @@ router.post('/encounters', (req, res) => {
 })
 
 router.post('/animals', (req, res) => {
-  const animal = new models.Animal(req.body)
-  console.log(animal.encounters)
-  validate(animal)
-  .then(data => {
-    console.log(data)
-    // check if the animal_id exists in database
-    return db.oneOrNone('SELECT * FROM elements WHERE animal_id = $/animal_id/', data)
+  let element = new models.Animal(req.body)
+  // find or create element occurance
+  findOrCreateElement(element)
+  .then(elementId => {
+    let enc = new models.Encounter(element.encounters)
+    enc.element_id = elementId.id
+    let d = _.pickBy(enc, value => !_.isUndefined(value))
+    let sql = pgp.helpers.insert(d, null, 'events') + ' RETURNING *'
+    // res.status(200).json({ enc: d, sql: sql })
+    // rund the query
+    return db.oneOrNone(sql)
   })
-  .then(data => {
-    // get animal id or append animal if it doesn't exist
-    if (!data) {
-      const sqlAnimal = pgp.helpers.insert({
-        animal_id: animal.animal_id,
-        species_id: animal.species_id,
-        sex: animal.sex
-      }, null, 'elements') + ' RETURNING *'
-
-      console.log(sqlAnimal)
-      return db.oneOrNone(sqlAnimal)
-    } else {
-      return data
-    }
-  })
-  .then(element => {
-    animal.encounters.element_id = element.id
-    const sqlEvent = pgp.helpers.insert(animal.encounters, null, 'events')
-    console.log(sqlEvent)
-    return sqlEvent
-  })
-  .then(data => res.status(200).json({ success: true, data: data }))
-  .catch(err => res.status(400).json({ success: false, error: err }))
+  .then(dat => res.status(200).json({ success: true, data: dat }))
+  .catch(err => res.status(400).json({ error: err }))
 })
+
+function getInsertElementId (animal) {
+  return db.task(t => {
+    return t.oneOrNone('SELECT id FROM elements WHERE animal_id = $/animal_id/', animal, u => u && u.id)
+    .then(elementId => {
+      console.log(elementId)
+      return elementId ||
+        t.one(
+          'INSERT INTO elements (animal_id, species_id, sex) VALUES ($/animal_id/, $/species_id/, $/sex/) RETURNING id',
+          animal,
+          u => u.id
+        )
+    })
+  })
+}
+
+const findOrCreateElement = (animal) => {
+  const sql = `
+    WITH ins AS (
+      INSERT INTO elements (animal_id, species_id, sex)
+      VALUES ($/animal_id/, $/species_id/, $/sex/)
+      ON CONFLICT(animal_id) DO UPDATE
+      SET animal_id = elements.animal_id WHERE FALSE
+      RETURNING elements.id
+    )
+    SELECT id FROM ins
+    UNION ALL
+    SELECT id FROM elements
+    WHERE animal_id = $/animal_id/
+    LIMIT 1;
+  `
+  return db.one(sql, animal)
+}
 
 module.exports = router

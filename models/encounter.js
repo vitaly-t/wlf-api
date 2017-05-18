@@ -1,6 +1,10 @@
 const { attributes } = require('structure')
 
 const Encounter = attributes({
+  element_id: {
+    type: Number,
+    integer: true
+  },
   status: {
     type: String,
     required: true,

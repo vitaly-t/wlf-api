@@ -1,6 +1,10 @@
 const { attributes } = require('structure')
 
 const Mark = attributes({
+  element_id: {
+    type: Number,
+    integer: true
+  },
   mark_type: {
     type: String,
     required: true
