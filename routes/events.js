@@ -63,9 +63,34 @@ router.post('/encounters', (req, res) => {
 
 router.post('/animals', (req, res) => {
   const animal = new models.Animal(req.body)
-  // const encounter = new models.Encounter(req.body.encounters)
-  // animal['encounters'] = encounter
+  console.log(animal.encounters)
   validate(animal)
+  .then(data => {
+    console.log(data)
+    // check if the animal_id exists in database
+    return db.oneOrNone('SELECT * FROM elements WHERE animal_id = $/animal_id/', data)
+  })
+  .then(data => {
+    // get animal id or append animal if it doesn't exist
+    if (!data) {
+      const sqlAnimal = pgp.helpers.insert({
+        animal_id: animal.animal_id,
+        species_id: animal.species_id,
+        sex: animal.sex
+      }, null, 'elements') + ' RETURNING *'
+
+      console.log(sqlAnimal)
+      return db.oneOrNone(sqlAnimal)
+    } else {
+      return data
+    }
+  })
+  .then(element => {
+    animal.encounters.element_id = element.id
+    const sqlEvent = pgp.helpers.insert(animal.encounters, null, 'events')
+    console.log(sqlEvent)
+    return sqlEvent
+  })
   .then(data => res.status(200).json({ success: true, data: data }))
   .catch(err => res.status(400).json({ success: false, error: err }))
 })
