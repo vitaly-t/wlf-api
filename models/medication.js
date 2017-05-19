@@ -1,6 +1,10 @@
 const { attributes } = require('structure')
 
 const Medication = attributes({
+  event_id: {
+    type: Number,
+    integer: true
+  },
   medication: {
     type: String,
     required: true

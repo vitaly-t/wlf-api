@@ -79,6 +79,18 @@ const Animal = attributes({
       return t.one(this.sqlElement())
       .then(elementId => {
         return t.one(this.Encounters.sqlEvent(elementId.id))
+        .then(data => {
+          // here i'll concatenate sql strings for everything else
+          let ids = { elementId: elementId.id, eventId: data.id }
+          let sql = helpers.concat([
+            this.sqlMarks(ids.elementId),
+            this.Encounters.sqlBiometrics(ids.eventId),
+            this.Encounters.sqlVitals(ids.eventId),
+            this.Encounters.sqlSamples(ids.eventId),
+            this.Encounters.sqlMedications(ids.eventId)
+          ])
+          return t.oneOrNone(sql)
+        })
       })
     })
   }

@@ -1,6 +1,10 @@
 const { attributes } = require('structure')
 
 const Sample = attributes({
+  event_id: {
+    type: Number,
+    integer: true
+  },
   sample: {
     type: String,
     required: true

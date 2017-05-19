@@ -36,19 +36,19 @@ const Encounter = attributes({
     equal: ['disease', 'monitoring', 'translocation'],
     default: null
   },
-  biometrics: {
+  Biometrics: {
     type: Array,
     itemType: 'Biometrics'
   },
-  samples: {
+  Samples: {
     type: Array,
     itemType: 'Samples'
   },
-  medications: {
+  Medications: {
     type: Array,
     itemType: 'Medications'
   },
-  vitals: {
+  Vitals: {
     type: Array,
     itemType: 'Vitals'
   }
@@ -67,6 +67,26 @@ const Encounter = attributes({
   sqlEvent (elementId) {
     this.element_id = elementId
     return helpers.insert(this.getEvent(), null, 'events') + ' RETURNING *'
+  }
+
+  sqlBiometrics (eventId) {
+    this.Biometrics.map(b => { b.event_id = eventId })
+    return helpers.insert(this.Biometrics, Object.keys(this.Biometrics[0].attributes), 'biometrics')
+  }
+
+  sqlVitals (eventId) {
+    this.Vitals.map(v => { v.event_id = eventId })
+    return helpers.insert(this.Vitals, Object.keys(this.Vitals[0].attributes), 'vitals')
+  }
+
+  sqlSamples (eventId) {
+    this.Samples.map(s => { s.event_id = eventId })
+    return helpers.insert(this.Samples, Object.keys(this.Samples[0].attributes), 'samples')
+  }
+
+  sqlMedications (eventId) {
+    this.Medications.map(m => { m.event_id = eventId })
+    return helpers.insert(this.Medications, Object.keys(this.Medications[0].attributes), 'medications')
   }
 })
 

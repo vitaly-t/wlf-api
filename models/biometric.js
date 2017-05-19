@@ -1,6 +1,10 @@
 const { attributes } = require('structure')
 
 const Biometric = attributes({
+  event_id: {
+    type: Number,
+    integer: true
+  },
   measurement: {
     type: String,
     required: true
