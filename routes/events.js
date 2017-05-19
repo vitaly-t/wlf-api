@@ -78,6 +78,22 @@ router.post('/animals', (req, res) => {
   .catch(err => res.status(400).json({ error: err }))
 })
 
+router.post('/test', (req, res) => {
+  const animal = new models.Animal(req.body)
+
+  validate(animal)
+  .then(animal => animal.pushAnimal(db))
+  .then(animal => res.status(200).json({
+    data: animal
+    // getElement: animal.getElement(),
+    // sqlElement: animal.sqlElement(),
+    // sqlMarks: animal.sqlMarks(1),
+    // getEvent: animal.getEncounter(),
+    // sqlEvent: animal.Encounters.sqlEvent(1)
+  }))
+  .catch(error => res.status(400).json(error))
+})
+
 function getInsertElementId (animal) {
   return db.task(t => {
     return t.oneOrNone('SELECT id FROM elements WHERE animal_id = $/animal_id/', animal, u => u && u.id)

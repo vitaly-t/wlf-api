@@ -1,4 +1,10 @@
 const { attributes } = require('structure')
+const format = require('pg-promise').as.format
+const helpers = require('pg-promise')().helpers
+
+const pick = (o, ...props) => {
+  return Object.assign({}, ...props.map(prop => ({[prop]: o[prop]})))
+}
 
 const Encounter = attributes({
   element_id: {
@@ -53,6 +59,15 @@ const Encounter = attributes({
     Medications: () => require('./medication'),
     Vitals: () => require('./vitals')
   }
-})(class Encounter {})
+})(class Encounter {
+  getEvent () {
+    return pick(this, 'element_id', 'status', 'age', 'event_date', 'enc_method', 'enc_reason')
+  }
+
+  sqlEvent (elementId) {
+    this.element_id = elementId
+    return helpers.insert(this.getEvent(), null, 'events') + ' RETURNING *'
+  }
+})
 
 module.exports = Encounter
