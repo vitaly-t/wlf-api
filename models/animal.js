@@ -75,7 +75,7 @@ const Animal = attributes({
   // push to database methods
   pushAnimal (db) {
     // return db.one(this.sqlElement())
-    return db.task(t => {
+    return db.tx(t => {
       return t.one(this.sqlElement())
       .then(elementId => {
         return t.one(this.Encounters.sqlEvent(elementId.id))
