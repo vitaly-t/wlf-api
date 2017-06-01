@@ -79,11 +79,13 @@ router.post('/animals', (req, res) => {
 })
 
 router.post('/test', (req, res) => {
+  console.log(req.body)
   const animal = new models.Animal(req.body)
 
   validate(animal)
-  .then(animal => animal.pushAnimal(db))
+  // .then(animal => animal.pushAnimal(db))
   .then(animal => res.status(200).json({
+    msg: 'validating animal only, returns the animal object',
     data: animal
     // getElement: animal.getElement(),
     // sqlElement: animal.sqlElement(),
