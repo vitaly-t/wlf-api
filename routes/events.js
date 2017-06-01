@@ -85,8 +85,11 @@ router.post('/test', (req, res) => {
   validate(animal)
   // .then(animal => animal.pushAnimal(db))
   .then(animal => res.status(200).json({
-    msg: 'validating animal only, returns the animal object',
-    data: animal
+    msg: 'chekcing animal object only',
+    hasMarks: !animal.Marks
+    // msg: 'successfully entered animal to database'
+    // data: animal,
+    // vitals: animal.Encounters.sqlVitals(1)
     // getElement: animal.getElement(),
     // sqlElement: animal.sqlElement(),
     // sqlMarks: animal.sqlMarks(1),

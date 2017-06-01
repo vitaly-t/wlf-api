@@ -68,6 +68,10 @@ const Animal = attributes({
   }
 
   sqlMarks (elementId) {
+    if (!this.Marks) {
+      return ''
+    }
+
     this.Marks.map(m => { m.element_id = elementId })
     return helpers.insert(this.Marks, Object.keys(this.Marks[0].attributes), 'marks')
   }
@@ -81,7 +85,7 @@ const Animal = attributes({
         return t.one(this.Encounters.sqlEvent(elementId.id))
         .then(data => {
           let ids = { elementId: elementId.id, eventId: data.id }
-          
+
           // concatenate sql strings for everything else
           let sql = helpers.concat([
             this.sqlMarks(ids.elementId),

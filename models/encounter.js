@@ -70,21 +70,39 @@ const Encounter = attributes({
   }
 
   sqlBiometrics (eventId) {
+    if (!this.Biometrics) {
+      return ''
+    }
+
     this.Biometrics.map(b => { b.event_id = eventId })
     return helpers.insert(this.Biometrics, Object.keys(this.Biometrics[0].attributes), 'biometrics')
   }
 
   sqlVitals (eventId) {
+    /* the if statement is required in order for the transaction to be successful, without
+    the returning an empty string the concanated sql string will cause the transaction to rollback */
+    if (!this.Vitals) {
+      return ''
+    }
+
     this.Vitals.map(v => { v.event_id = eventId })
     return helpers.insert(this.Vitals, Object.keys(this.Vitals[0].attributes), 'vitals')
   }
 
   sqlSamples (eventId) {
+    if (!this.Samples) {
+      return ''
+    }
+
     this.Samples.map(s => { s.event_id = eventId })
     return helpers.insert(this.Samples, Object.keys(this.Samples[0].attributes), 'samples')
   }
 
   sqlMedications (eventId) {
+    if (!this.Medications) {
+      return ''
+    }
+
     this.Medications.map(m => { m.event_id = eventId })
     return helpers.insert(this.Medications, Object.keys(this.Medications[0].attributes), 'medications')
   }
