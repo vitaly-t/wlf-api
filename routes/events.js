@@ -83,18 +83,17 @@ router.post('/test', (req, res) => {
   const animal = new models.Animal(req.body)
 
   validate(animal)
-  // .then(animal => animal.pushAnimal(db))
+  .then(animal => animal.pushAnimal(db))
   .then(animal => res.status(200).json({
-    msg: 'chekcing animal object only',
-    hasMarks: !animal.Marks
-    // msg: 'successfully entered animal to database'
+    // msg: 'chekcing animal object only',
+    // hasMarks: !!animal.Marks,
+    // hasBiometrics: !!animal.Encounters.Biometrics,
+    // hasVitals: !!animal.Encounters.Vitals,
+    // hasSamples: !!animal.Encounters.Samples,
+    // hasMedications: !!animal.Encounters.Medications,
+    // justElementEvent: !animal.Marks && !animal.Encounters.Biometrics && !animal.Encounters.Vitals && !animal.Encounters.Samples && !animal.Encounters.Medications
+    msg: 'successfully entered animal to database'
     // data: animal,
-    // vitals: animal.Encounters.sqlVitals(1)
-    // getElement: animal.getElement(),
-    // sqlElement: animal.sqlElement(),
-    // sqlMarks: animal.sqlMarks(1),
-    // getEvent: animal.getEncounter(),
-    // sqlEvent: animal.Encounters.sqlEvent(1)
   }))
   .catch(error => res.status(400).json(error))
 })

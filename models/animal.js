@@ -84,17 +84,23 @@ const Animal = attributes({
       .then(elementId => {
         return t.one(this.Encounters.sqlEvent(elementId.id))
         .then(data => {
-          let ids = { elementId: elementId.id, eventId: data.id }
+          // checking if the animal object is only element and event
+          if (!this.Marks && !this.Encounters.Biometrics && !this.Encounters.Vitals &&
+            !this.Encounters.Samples && !this.Encounters.Medications) {
+            return data
+          } else {
+            let ids = { elementId: elementId.id, eventId: data.id }
 
-          // concatenate sql strings for everything else
-          let sql = helpers.concat([
-            this.sqlMarks(ids.elementId),
-            this.Encounters.sqlBiometrics(ids.eventId),
-            this.Encounters.sqlVitals(ids.eventId),
-            this.Encounters.sqlSamples(ids.eventId),
-            this.Encounters.sqlMedications(ids.eventId)
-          ])
-          return t.oneOrNone(sql)
+            // concatenate sql strings for everything else
+            let sql = helpers.concat([
+              this.sqlMarks(ids.elementId),
+              this.Encounters.sqlBiometrics(ids.eventId),
+              this.Encounters.sqlVitals(ids.eventId),
+              this.Encounters.sqlSamples(ids.eventId),
+              this.Encounters.sqlMedications(ids.eventId)
+            ])
+            return t.oneOrNone(sql)
+          }
         })
       })
     })
