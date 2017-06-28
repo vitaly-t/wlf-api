@@ -2,8 +2,10 @@ const { attributes } = require('structure')
 
 const Injury = attributes({
   injury_type: {
+    side: String,
+    location: String,
     type: String,
-    required: true
+    treatment: String
   }
 })(class Injury {})
 

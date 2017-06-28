@@ -51,13 +51,18 @@ const Encounter = attributes({
   Vitals: {
     type: Array,
     itemType: 'Vitals'
+  },
+  Injuries: {
+    type: Array,
+    itemType: 'Injuries'
   }
 }, {
   dynamics: {
     Biometrics: () => require('./biometric'),
     Samples: () => require('./sample'),
     Medications: () => require('./medication'),
-    Vitals: () => require('./vitals')
+    Vitals: () => require('./vitals'),
+    Injuries: () => require('./injury')
   }
 })(class Encounter {
   getEvent () {
@@ -105,6 +110,15 @@ const Encounter = attributes({
 
     this.Medications.map(m => { m.event_id = eventId })
     return helpers.insert(this.Medications, Object.keys(this.Medications[0].attributes), 'medications')
+  }
+
+  sqlInjuries (eventId) {
+    if (!this.Injuries) {
+      return ''
+    }
+
+    this.Injuries.map(m => { m.event_id = eventId })
+    return helpers.insert(this.Injuries, Object.keys(this.Injuries[0].attributes), 'injuries')
   }
 })
 

@@ -27,11 +27,16 @@ const Animal = attributes({
     type: Array,
     itemType: 'Marks'
   },
+  Devices: {
+    type: Array,
+    itemType: 'Devices'
+  },
   Encounters: {
     type: 'Encounters'
   }
 }, {
   dynamics: {
+    Devices: () => require('./devices'),
     Marks: () => require('./marks'),
     Encounters: () => require('./encounter')
   }
@@ -63,6 +68,7 @@ const Animal = attributes({
   getEncounter () {
     return this.Encounters.getEvent()
   }
+
   sqlEncounter () {
     return this.Encounters.sqlEvent()
   }
@@ -74,6 +80,15 @@ const Animal = attributes({
 
     this.Marks.map(m => { m.element_id = elementId })
     return helpers.insert(this.Marks, Object.keys(this.Marks[0].attributes), 'marks')
+  }
+
+  sqlDevices (elementId) {
+    if (!this.Devices) {
+      return ''
+    }
+
+    this.Devices.map(m => { m.element_id = elementId })
+    return helpers.insert(this.Devices, Object.keys(this.Devices[0].attributes), 'deployments')
   }
 
   // push to database methods
@@ -94,10 +109,12 @@ const Animal = attributes({
             // concatenate sql strings for everything else
             let sql = helpers.concat([
               this.sqlMarks(ids.elementId),
+              this.sqlDevices(ids.elementId),
               this.Encounters.sqlBiometrics(ids.eventId),
               this.Encounters.sqlVitals(ids.eventId),
               this.Encounters.sqlSamples(ids.eventId),
-              this.Encounters.sqlMedications(ids.eventId)
+              this.Encounters.sqlMedications(ids.eventId),
+              this.Encounters.sqlInjuries(ids.eventId)
             ])
             return t.oneOrNone(sql)
           }
