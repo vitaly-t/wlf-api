@@ -5,18 +5,22 @@ const Device = attributes({
     type: Number,
     integer: true
   },
-  device_type: {
+  type: {
     type: String,
     required: true
   },
-  serial_number: {
+  serial_num: {
     type: String,
     required: true
   },
-  date_given: {
+  frequency: {
+    type: String,
+    required: true
+  },
+  inservice: {
     type: Date
   },
-  date_removed: {
+  outservice: {
     type: Date
   }
 })(class Device {})

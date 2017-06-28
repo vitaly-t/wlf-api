@@ -1,12 +1,11 @@
 const { attributes } = require('structure')
 
 const Injury = attributes({
-  injury_type: {
-    side: String,
-    location: String,
-    type: String,
-    treatment: String
-  }
+  injury_side: String,
+  injury_location: String,
+  injury_type: String,
+  injury_description: String,
+  injury_treatment: String
 })(class Injury {})
 
 module.exports = Injury
