@@ -86,12 +86,6 @@ router.post('/test', (req, res) => {
   .then(animal => animal.pushAnimal(db))
   .then(animal => res.status(200).json({
     // msg: 'chekcing animal object only',
-    // hasMarks: !!animal.Marks,
-    // hasBiometrics: !!animal.Encounters.Biometrics,
-    // hasVitals: !!animal.Encounters.Vitals,
-    // hasSamples: !!animal.Encounters.Samples,
-    // hasMedications: !!animal.Encounters.Medications,
-    // justElementEvent: !animal.Marks && !animal.Encounters.Biometrics && !animal.Encounters.Vitals && !animal.Encounters.Samples && !animal.Encounters.Medications
     msg: 'successfully entered animal to database',
     data: animal
   }))

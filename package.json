@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "ENV=test node_modules/.bin/mocha -u exports test/integration/*",
-    "dev": "ENV=development nodemon index.js"
+    "dev": "ENV=development nodemon index.js",
+    "remote": "ENV=remote PORT=1414 nodemon index.js"
   },
   "repository": {
     "type": "git",

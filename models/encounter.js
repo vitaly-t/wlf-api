@@ -33,8 +33,16 @@ const Encounter = attributes({
   enc_reason: {
     type: String,
     empty: true,
-    equal: ['disease', 'monitoring', 'translocation'],
+    equal: ['disease surveilance', 'population monitoring', 'translocation'],
     default: null
+  },
+  x: {
+    type: Number,
+    required: true
+  },
+  y: {
+    type: Number,
+    required: true
   },
   Biometrics: {
     type: Array,
@@ -43,6 +51,10 @@ const Encounter = attributes({
   Samples: {
     type: Array,
     itemType: 'Samples'
+  },
+  LabIds: {
+    type: Array,
+    itemType: 'LabIds'
   },
   Medications: {
     type: Array,
@@ -55,18 +67,27 @@ const Encounter = attributes({
   Injuries: {
     type: Array,
     itemType: 'Injuries'
+  },
+  Mortality: {
+    type: 'Mortality'
+  },
+  Necropsy: {
+    type: 'Necropsy'
   }
 }, {
   dynamics: {
     Biometrics: () => require('./biometric'),
     Samples: () => require('./sample'),
+    LabIds: () => require('./labid'),
     Medications: () => require('./medication'),
     Vitals: () => require('./vitals'),
-    Injuries: () => require('./injury')
+    Injuries: () => require('./injury'),
+    Mortality: () => require('./mortality'),
+    Necropsy: () => require('./necropsy')
   }
 })(class Encounter {
   getEvent () {
-    return pick(this, 'element_id', 'status', 'age', 'event_date', 'enc_method', 'enc_reason')
+    return pick(this, 'element_id', 'status', 'age', 'event_date', 'enc_method', 'enc_reason', 'x', 'y')
   }
 
   sqlEvent (elementId) {
@@ -103,6 +124,15 @@ const Encounter = attributes({
     return helpers.insert(this.Samples, Object.keys(this.Samples[0].attributes), 'samples')
   }
 
+  sqlLabIds (eventId) {
+    if (!this.LabIds) {
+      return ''
+    }
+
+    this.LabIds.map(s => { s.event_id = eventId })
+    return helpers.insert(this.LabIds, Object.keys(this.LabIds[0].attributes), 'lab_ids')
+  }
+
   sqlMedications (eventId) {
     if (!this.Medications) {
       return ''
@@ -119,6 +149,25 @@ const Encounter = attributes({
 
     this.Injuries.map(m => { m.event_id = eventId })
     return helpers.insert(this.Injuries, Object.keys(this.Injuries[0].attributes), 'injuries')
+  }
+
+  sqlMortality (eventId) {
+    if (!this.Mortality) {
+      return ''
+    }
+
+    this.Mortality.event_id = eventId
+    // return this.Mortality
+    return helpers.insert(this.Mortality, Object.keys(this.Mortality.attributes), 'mortalities')
+  }
+
+  sqlNecropsy (eventId) {
+    if (!this.Necropsy) {
+      return ''
+    }
+
+    this.Necropsy.event_id = eventId
+    return helpers.insert(this.Necropsy, Object.keys(this.Necropsy.attributes), 'necropsies')
   }
 })
 
