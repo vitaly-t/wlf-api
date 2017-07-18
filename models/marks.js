@@ -1,4 +1,6 @@
 const { attributes } = require('structure')
+const helpers = require('pg-promise')().helpers
+const { pick } = '../middleware/util'
 
 const Mark = attributes({
   element_id: {
@@ -29,6 +31,39 @@ const Mark = attributes({
   notes: {
     type: String
   }
-})(class Mark {})
+})(class Mark {
+  getMark () {
+    return pick(this, 'element_id', 'mark_type', 'mark_id', 'mark_color', 'mark_location', 'date_given', 'date_removed', 'notes')
+  }
+
+  upsert (elementId) {
+    let insert = helpers.insert(this, this.attributes, 'marks')
+    let update = helpers.update(this, this.attributes, 'marks')
+
+    let sql = insert + ' ON CONFLICT (element_id, mark_id, mark_location) DO UPDATE SET ' + update
+
+    return sql
+  }
+
+  insert (elementId) {
+    this.element_id = elementId
+    return helpers.insert(this, this.attributes, 'marks')
+  }
+
+  update (elementId) {
+    this.element_id = elementId
+    return helpers.update(this, this.attributes, 'marks')
+  }
+
+  values (elementId) {
+    this.element_id = elementId
+    return helpers.values(this, this.attributes)
+  }
+
+  sets (elementId) {
+    this.element_id = elementId
+    return helpers.sets(this, this.attributes)
+  }
+})
 
 module.exports = Mark

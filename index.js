@@ -20,6 +20,7 @@ app.use('/projects', routes.projects)
 app.use('/elements', routes.elements)
 app.use('/test', routes.testing)
 app.use('/events', routes.events)
+app.use('/marks', routes.marks)
 
 app.get('/animals', (req, res) => {
   db.many('SELECT * FROM animals')

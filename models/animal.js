@@ -46,7 +46,7 @@ const Animal = attributes({
   }
 
   sqlElement () {
-    // below needs to go into a queryfile
+    // TODO: put the below in a QueryFile
     let sql = `
             WITH ins AS (
             INSERT INTO elements (animal_id, species_id, sex)
@@ -80,6 +80,30 @@ const Animal = attributes({
 
     this.Marks.map(m => { m.element_id = elementId })
     return helpers.insert(this.Marks, Object.keys(this.Marks[0].attributes), 'marks')
+  }
+
+  upsertMarks (elementId) {
+    if (!this.Marks) {
+      return ''
+    }
+
+    let values = this.Marks.map(v => v.values(elementId)).reduce((prev, curr) => prev + ', ' + curr)
+
+    let insert = this.sqlMarks(elementId)
+
+    let update = `
+    ON CONFLICT (element_id, mark_id, mark_location)
+    DO UPDATE SET
+      mark_type = EXCLUDED.mark_type,
+      mark_id = EXCLUDED.mark_id,
+      mark_color = EXCLUDED.mark_color,
+      mark_location = EXCLUDED.mark_location,
+      date_given = EXCLUDED.date_given,
+      date_removed = EXCLUDED.date_removed,
+      notes = EXCLUDED.notes
+    `
+
+    return format(insert + ' ' + update)
   }
 
   sqlDevices (elementId) {
