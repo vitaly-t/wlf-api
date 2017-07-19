@@ -64,6 +64,21 @@ const Mark = attributes({
     this.element_id = elementId
     return helpers.sets(this, this.attributes)
   }
+
+  cs () {
+    const cs = new helpers.ColumnSet([
+      'element_id',
+      'mark_type',
+      'mark_id',
+      'mark_color',
+      'mark_location',
+      'date_given',
+      'date_removed',
+      'notes'
+    ], { table: { table: 'marks' } })
+
+    return cs
+  }
 })
 
 module.exports = Mark

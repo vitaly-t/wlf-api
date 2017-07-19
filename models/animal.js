@@ -1,7 +1,9 @@
 const { attributes } = require('structure')
 const format = require('pg-promise').as.format
+const name = require('pg-promise').as.name
 const helpers = require('pg-promise')().helpers
 const sql = require('../db/sql')
+const util = require('../middleware/util')
 
 const pick = (o, ...props) => {
   return Object.assign({}, ...props.map(prop => ({[prop]: o[prop]})))
@@ -88,11 +90,8 @@ const Animal = attributes({
       return ''
     }
 
-    const val = this.Marks
-      .map(v => v.values(elementId))
-      .reduce((prev, curr) => prev + ', ' + curr)
-
-    return format(sql.marks.upsert.query, {val: val})
+    this.Marks.map(m => { m.element_id = elementId })
+    return util.upsertSql(this.Marks, this.Marks[0].cs(), 'element_id, mark_id, mark_location')
   }
 
   sqlDevices (elementId) {
