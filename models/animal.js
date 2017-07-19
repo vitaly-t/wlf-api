@@ -1,8 +1,6 @@
 const { attributes } = require('structure')
 const format = require('pg-promise').as.format
-const name = require('pg-promise').as.name
 const helpers = require('pg-promise')().helpers
-const sql = require('../db/sql')
 const util = require('../middleware/util')
 
 const pick = (o, ...props) => {
@@ -76,16 +74,7 @@ const Animal = attributes({
     return this.Encounters.sqlEvent()
   }
 
-  sqlMarks (elementId) {
-    if (!this.Marks) {
-      return ''
-    }
-
-    this.Marks.map(m => { m.element_id = elementId })
-    return helpers.insert(this.Marks, Object.keys(this.Marks[0].attributes), 'marks')
-  }
-
-  upsertSqlMarks (elementId) {
+  upsertMarks (elementId) {
     if (!this.Marks) {
       return ''
     }
@@ -94,13 +83,13 @@ const Animal = attributes({
     return util.upsertSql(this.Marks, this.Marks[0].cs(), 'element_id, mark_id, mark_location')
   }
 
-  sqlDevices (elementId) {
+  upsertDevices (elementId) {
     if (!this.Devices) {
       return ''
     }
 
     this.Devices.map(m => { m.element_id = elementId })
-    return helpers.insert(this.Devices, Object.keys(this.Devices[0].attributes), 'deployments')
+    return util.upsertSql(this.Devices, this.Devices[0].cs(), 'element_id, serial_num, frequency')
   }
 
   // push to database methods
@@ -120,8 +109,8 @@ const Animal = attributes({
 
             // concatenate sql strings for everything else
             let sql = helpers.concat([
-              this.upsertSqlMarks(ids.elementId),
-              this.sqlDevices(ids.elementId),
+              this.upsertMarks(ids.elementId),
+              this.upsertDevices(ids.elementId),
               this.Encounters.sqlBiometrics(ids.eventId),
               this.Encounters.sqlVitals(ids.eventId),
               this.Encounters.sqlSamples(ids.eventId),

@@ -1,4 +1,5 @@
 const { attributes } = require('structure')
+const helpers = require('pg-promise')().helpers
 
 const Device = attributes({
   element_id: {
@@ -23,6 +24,11 @@ const Device = attributes({
   outservice: {
     type: Date
   }
-})(class Device {})
+})(class Device {
+  cs () {
+    let columns = Object.keys(this.attributes)
+    return new helpers.ColumnSet(columns, { table: { table: 'deployments' } })
+  }
+})
 
 module.exports = Device
