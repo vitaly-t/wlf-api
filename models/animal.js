@@ -114,7 +114,7 @@ const Animal = attributes({
               this.Encounters.sqlBiometrics(ids.eventId),
               this.Encounters.sqlVitals(ids.eventId),
               this.Encounters.sqlSamples(ids.eventId),
-              this.Encounters.sqlLabIds(ids.eventId),
+              this.Encounters.upsertLabIds(ids.eventId),
               this.Encounters.sqlMedications(ids.eventId),
               this.Encounters.sqlInjuries(ids.eventId),
               this.Encounters.sqlMortality(ids.eventId),

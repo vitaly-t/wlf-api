@@ -1,4 +1,5 @@
 const { attributes } = require('structure')
+const helpers = require('pg-promise')().helpers
 
 const Labid = attributes({
   event_id: {
@@ -9,6 +10,11 @@ const Labid = attributes({
     type: String,
     required: true
   }
-})(class Labid {})
+})(class Labid {
+  cs () {
+    let columns = Object.keys(this.attributes)
+    return new helpers.ColumnSet(columns, { table: { table: 'lab_ids' } })
+  }
+})
 
 module.exports = Labid

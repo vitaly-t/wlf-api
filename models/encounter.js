@@ -1,6 +1,6 @@
 const { attributes } = require('structure')
-const format = require('pg-promise').as.format
 const helpers = require('pg-promise')().helpers
+const util = require('../middleware/util')
 
 const pick = (o, ...props) => {
   return Object.assign({}, ...props.map(prop => ({[prop]: o[prop]})))
@@ -124,13 +124,13 @@ const Encounter = attributes({
     return helpers.insert(this.Samples, Object.keys(this.Samples[0].attributes), 'samples')
   }
 
-  sqlLabIds (eventId) {
+  upsertLabIds (eventId) {
     if (!this.LabIds) {
       return ''
     }
 
     this.LabIds.map(s => { s.event_id = eventId })
-    return helpers.insert(this.LabIds, Object.keys(this.LabIds[0].attributes), 'lab_ids')
+    return util.upsertSql(this.LabIds, this.LabIds[0].cs(), 'lab_id')
   }
 
   sqlMedications (eventId) {

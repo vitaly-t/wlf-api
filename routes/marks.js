@@ -13,11 +13,11 @@ router.post('/test', (req, res) => {
   const animal = new models.Animal(req.body)
 
   // res.status(200).json({
-  //   devices: animal.Devices,
-  //   columnSet: animal.Devices[0].cs(),
-  //   sql: animal.upsertDevices(6)
+  //   devices: animal.Encounters.LabIds,
+  //   columnSet: animal.Encounters.LabIds[0].cs(),
+  //   sql: animal.Encounters.upsertLabIds(3)
   // })
-  db.any(animal.upsertDevices(6))
+  db.any(animal.Encounters.upsertLabIds(3))
   .then(data => res.status(200).json({ success: true, data: data }))
   .catch(err => res.status(400).json({ success: false, error: err }))
 })
