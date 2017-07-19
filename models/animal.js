@@ -121,7 +121,7 @@ const Animal = attributes({
 
             // concatenate sql strings for everything else
             let sql = helpers.concat([
-              this.sqlMarks(ids.elementId),
+              this.upsertSqlMarks(ids.elementId),
               this.sqlDevices(ids.elementId),
               this.Encounters.sqlBiometrics(ids.eventId),
               this.Encounters.sqlVitals(ids.eventId),
