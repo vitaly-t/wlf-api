@@ -28,6 +28,9 @@ module.exports = {
     all: sql('elements/all.sql'),
     show: sql('elements/show.sql')
   },
+  marks: {
+    upsert: sql('marks/upsert.sql')
+  },
   mock: {
     up: sql('mock/up.sql'),
     rollback: sql('mock/rollback.sql')

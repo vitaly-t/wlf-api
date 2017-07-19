@@ -7,7 +7,8 @@ const repos = {
   species: require('./repos/species'),
   projects: require('./repos/projects'),
   mock: require('./repos/mock'),
-  elements: require('./repos/elements')
+  elements: require('./repos/elements'),
+  marks: require('./repos/marks')
 }
 
 // set pg-promise options

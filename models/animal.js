@@ -1,6 +1,7 @@
 const { attributes } = require('structure')
 const format = require('pg-promise').as.format
 const helpers = require('pg-promise')().helpers
+const sql = require('../db/sql')
 
 const pick = (o, ...props) => {
   return Object.assign({}, ...props.map(prop => ({[prop]: o[prop]})))
@@ -82,28 +83,16 @@ const Animal = attributes({
     return helpers.insert(this.Marks, Object.keys(this.Marks[0].attributes), 'marks')
   }
 
-  upsertMarks (elementId) {
+  upsertSqlMarks (elementId) {
     if (!this.Marks) {
       return ''
     }
 
-    let values = this.Marks.map(v => v.values(elementId)).reduce((prev, curr) => prev + ', ' + curr)
+    const val = this.Marks
+      .map(v => v.values(elementId))
+      .reduce((prev, curr) => prev + ', ' + curr)
 
-    let insert = this.sqlMarks(elementId)
-
-    let update = `
-    ON CONFLICT (element_id, mark_id, mark_location)
-    DO UPDATE SET
-      mark_type = EXCLUDED.mark_type,
-      mark_id = EXCLUDED.mark_id,
-      mark_color = EXCLUDED.mark_color,
-      mark_location = EXCLUDED.mark_location,
-      date_given = EXCLUDED.date_given,
-      date_removed = EXCLUDED.date_removed,
-      notes = EXCLUDED.notes
-    `
-
-    return format(insert + ' ' + update)
+    return format(sql.marks.upsert.query, {val: val})
   }
 
   sqlDevices (elementId) {
